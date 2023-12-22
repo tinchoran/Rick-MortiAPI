@@ -1,10 +1,12 @@
-
 import { getCharacters } from "./services/getData.js"; 
 
 const $container = document.querySelector("#characters")
 const $loader = document.querySelector("#lds-ring")
+const $btns = document.querySelectorAll(".btn-interact");
+const $pageNumber = document.querySelector("#pageNumber")
+let page = 1;
 
-const characterList = async ( page= 1 ) => {
+const characterList = async ( ) => {
     //Primero muestro el loader
     $loader.style.display = "grid";
 
@@ -15,7 +17,7 @@ const characterList = async ( page= 1 ) => {
     $loader.style.display = "none";
 
     results.forEach(character => {
-        $container.insertAdjacentHTML("beforeend" , 
+        $container.insertAdjacentHTML("afterbegin" , 
         `
         <article class="character">
             <img src="${character.image}" alt=${character.name} loading="lazy">
@@ -31,8 +33,6 @@ const characterList = async ( page= 1 ) => {
     })
 }
 
-characterList();
-
 window.addEventListener("hashchange", () => {
     //Si el enlace lleva a /#/3, id toma el valor 3 que es el ID del personaje
     const id = location.hash.slice(1).toLocaleLowerCase().split("/")[1] || "/";
@@ -41,3 +41,29 @@ window.addEventListener("hashchange", () => {
     window.location.replace("/character.html");
 
 })
+
+$btns.forEach(btn => {
+
+    btn.addEventListener("click", (e) => {
+        e.preventDefault()
+
+        if(e.target.id === "btn-1" && page > 1){
+            $container.innerHTML = "";
+            page -= 1
+            characterList(page)
+            $pageNumber.innerHTML = page
+
+        } else if(e.target.id === "btn-2"){
+            $container.innerHTML = "";
+            page += 1
+            characterList(page)
+            $pageNumber.innerHTML = page
+
+        }
+        
+    })
+
+})
+
+characterList(page);
+console.log(page);

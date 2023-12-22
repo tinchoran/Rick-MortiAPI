@@ -21,7 +21,7 @@ const getCharacter = async (id) => {
 const getCharacters = async (page) => {
 
     try {
-        
+
         const result = await fetch(`${baseUrl}/character/?page=${page}`)
 
         const data = await result.json();
